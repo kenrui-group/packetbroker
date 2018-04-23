@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" monitorInterval="30">
+    <Appenders>
+        <Console name="console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%C:%L] %-5level %logger{36} - %msg%n"/>
+        </Console>
+        <RollingRandomAccessFile name="RollingRandomAccessFileResendPacket" fileName="logs/resendpacket.log"
+                                 filePattern="logs/$${date:yyyy-MM}/resendpacket-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout>
+                <Pattern>%highlight{%d [%t] %p: %msg%n%throwable}</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="250 MB"/>
+            </Policies>
+        </RollingRandomAccessFile>
+        <RollingRandomAccessFile name="RollingRandomAccessFileQueuePackets" fileName="logs/queuepackets.log"
+                                 filePattern="logs/$${date:yyyy-MM}/queuepackets-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout>
+                <Pattern>%highlight{%d [%t] %p: %msg%n%throwable}</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="250 MB"/>
+            </Policies>
+        </RollingRandomAccessFile>
+        <RollingRandomAccessFile name="RollingRandomAccessFilePacketDump" fileName="logs/packetdump.log"
+                                 filePattern="logs/$${date:yyyy-MM}/packetdump-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout>
+                <Pattern>%highlight{%d [%t] %p: %msg%n%throwable}</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="250 MB"/>
+            </Policies>
+        </RollingRandomAccessFile>
+        <RollingRandomAccessFile name="RollingRandomAccessFilePacketCapture" fileName="logs/packetcapture.log"
+                                 filePattern="logs/$${date:yyyy-MM}/packetcapture-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout>
+                <Pattern>%highlight{%d [%t] %p: %msg%n%throwable}</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="250 MB"/>
+            </Policies>
+        </RollingRandomAccessFile>
+        <RollingRandomAccessFile name="RollingRandomAccessFileServer" fileName="logs/server.log"
+                                 filePattern="logs/$${date:yyyy-MM}/server-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout>
+                <Pattern>%highlight{%d [%t] %p: %msg%n%throwable}</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="250 MB"/>
+            </Policies>
+        </RollingRandomAccessFile>
+        <RollingRandomAccessFile name="RollingRandomAccessFileClient" fileName="logs/client.log"
+                                 filePattern="logs/$${date:yyyy-MM}/client-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout>
+                <Pattern>%highlight{%d [%t] %p: %msg%n%throwable}</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="250 MB"/>
+            </Policies>
+        </RollingRandomAccessFile>
+        <RollingRandomAccessFile name="RollingRandomAccessFilePacketBroker" fileName="logs/packetbroker.log"
+                                 filePattern="logs/$${date:yyyy-MM}/packetbroker-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout>
+                <Pattern>%highlight{%d [%t] %p: %msg%n%throwable}</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="250 MB"/>
+            </Policies>
+        </RollingRandomAccessFile>
+    </Appenders>
+    <Loggers>
+        <logger name="org.springframework" level="error">
+            <AppenderRef ref="console"/>
+        </logger>
+        <Logger name="ResendPacket" level="trace" additivity="false" includeLocation="false">
+            <AppenderRef ref="RollingRandomAccessFileResendPacket"/>
+        </Logger>
+        <Logger name="QueuePackets" level="trace" additivity="false" includeLocation="false">
+            <AppenderRef ref="RollingRandomAccessFileQueuePackets"/>
+        </Logger>
+        <Logger name="PacketDump" level="trace" additivity="false" includeLocation="false">
+            <AppenderRef ref="RollingRandomAccessFilePacketDump"/>
+        </Logger>
+        <Logger name="PacketCapture" level="trace" additivity="false" includeLocation="false">
+            <AppenderRef ref="RollingRandomAccessFilePacketCapture"/>
+        </Logger>
+        <Logger name="TunnelClient" level="trace" additivity="false" includeLocation="false">
+            <AppenderRef ref="RollingRandomAccessFileClient"/>
+        </Logger>
+        <Logger name="TunnelServer" level="trace" additivity="false" includeLocation="false">
+            <AppenderRef ref="RollingRandomAccessFileServer"/>
+        </Logger>
+        <Logger name="PacketBroker" level="trace" additivity="false" includeLocation="false">
+            <AppenderRef ref="RollingRandomAccessFilePacketBroker"/>
+        </Logger>
+        <Root level="error" includeLocation="false">
+            <AppenderRef ref="console"/>
+        </Root>
+    </Loggers>
+</Configuration>
