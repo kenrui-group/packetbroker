@@ -37,10 +37,22 @@ jobs:
             - ~/.m2
           key: v1-dependencies-{{ checksum "pom.xml" }}
 
-      - run: mvn package # run the actual tests
+      - run: mvn package
 
-      - store_test_results: # uploads the test metadata from the `target/surefire-reports` directory so that it can show up in the CircleCI dashboard.
-          path: target/surefire-reports
+      - run:
+          name: Save test results
+          command: |
+            mkdir -p ~/surefire-reports/
+            find . -type f -regex ".*/target/surefire-reports/.*xml" -exec cp {} ~/surefire-reports/ \;
+          when: always
+      - store_test_results:
+          path: ~/surefire-reports
 
-      - store_artifacts: # store the uberjar as an artifact
-          path: target/packetbroker-*-SNAPSHOT.jar
+      - run:
+          name: Save package
+          command: |
+            mkdir -p ~/package/
+            find . -type f -regex ".*/target/.*jar" -exec cp {} ~/package/ \;
+          when: always
+      - store_artifacts:
+          path: ~/package
