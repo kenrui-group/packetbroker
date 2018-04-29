@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/cheungtitus/packetbroker.svg?style=svg)](https://circleci.com/gh/cheungtitus/packetbroker)
+
 # Overview
 PacketBroker is a network packet capture, aggregation, and forwarding solution for moving network packets of any protocols to a centralized location for persistence and analysis.
 It is designed to run in the following devices to perform packet encapsulation, aggregation, and transport:
