@@ -10,6 +10,17 @@
     <description>Tunneling captured and time stamped packets of any protocols to and from remote locations.
     </description>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-bom</artifactId>
+                <version>2.11.0</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
     <dependencies>
         <!-- https://mvnrepository.com/artifact/com.lmax/disruptor -->
         <dependency>
@@ -25,24 +36,14 @@
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>
-            <version>2.11.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
-            <version>2.11.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-bom</artifactId>
-            <version>2.11.0</version>
-            <scope>import</scope>
-            <type>pom</type>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-slf4j-impl</artifactId>
-            <version>2.11.0</version>
         </dependency>
         <dependency>
             <groupId>org.pcap4j</groupId>
@@ -62,7 +63,13 @@
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
-            <version>6.9.13.5</version>
+            <version>6.10</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -91,6 +98,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.7.0</version>
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
@@ -175,7 +183,12 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.21.0</version>
                 <configuration>
-                    <skipTests>true</skipTests>
+                    <excludes>
+                        <exclude>**/EncodingDecodingViaQueueTest.java</exclude>
+                        <exclude>**/AppConfig*Test.java</exclude>
+                        <!--This java file was done as a test of how things can be like without Mockito and is not meant to be used anymore -->
+                        <exclude>**/ResendPacketTestNonMockito.java</exclude>
+                    </excludes>
                 </configuration>
                 <dependencies>
                     <dependency>
