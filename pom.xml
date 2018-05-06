@@ -7,8 +7,13 @@
     <groupId>com.kenrui</groupId>
     <artifactId>packetbroker</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <description>Tunneling captured and time stamped packets of any protocols to and from remote locations.
+    <description>
+        Tunneling captured and time stamped packets of any protocols to and from remote locations.
     </description>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
     <dependencyManagement>
         <dependencies>
@@ -189,6 +194,8 @@
                         <!--This java file was done as a test of how things can be like without Mockito and is not meant to be used anymore -->
                         <exclude>**/ResendPacketTestNonMockito.java</exclude>
                     </excludes>
+                    <!--http://maven.apache.org/surefire/maven-surefire-plugin/faq.html-->
+                    <argLine>@{surefireArgLine}</argLine>
                 </configuration>
                 <dependencies>
                     <dependency>
@@ -197,6 +204,66 @@
                         <version>2.21.0</version>
                     </dependency>
                 </dependencies>
+            </plugin>
+            <!--https://www.petrikainulainen.net/programming/maven/creating-code-coverage-reports-for-unit-and-integration-tests-with-the-jacoco-maven-plugin/-->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.1</version>
+                <configuration>
+                    <excludes>
+                        <!--Exclude SBE generated files-->
+                        <exclude>**/baseline/*.class</exclude>
+                        <!--Experimental classes shouldn't be tested-->
+                        <exclude>**/ThreadRunner/*.class</exclude>
+                        <!--Spring Annotation Configs shouldn't be tested-->
+                        <exclude>**/config/*.class</exclude>
+                        <!--Some utilities shoudln't be tested-->
+                        <exclude>**/utilities/SystemInfo.class</exclude>
+                        <exclude>**/utilities/UtilsFileHandler.class</exclude>
+                        <!--Main class can't be tested-->
+                        <exclude>**/PacketBroker.class</exclude>
+                    </excludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                        <configuration>
+                            <!-- Sets the path to the file which contains the execution data. -->
+                            <destFile>${project.build.directory}/coverage-reports/jacoco.exec</destFile>
+                            <!--
+                                Sets the name of the property containing the settings
+                                for JaCoCo runtime agent.
+                            -->
+                            <propertyName>surefireArgLine</propertyName>
+                        </configuration>
+                    </execution>
+                    <!--
+                        Ensures that the code coverage report for unit tests is created after
+                        unit tests have been run.
+                    -->
+                    <execution>
+                        <id>post-unit-test</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                        <configuration>
+                            <!-- Sets the path to the file which contains the execution data. -->
+                            <dataFile>${project.build.directory}/coverage-reports/jacoco.exec</dataFile>
+                            <!-- Sets the output directory for the code coverage report. -->
+                            <outputDirectory>${project.reporting.outputDirectory}/jacoco</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.eluder.coveralls</groupId>
+                <artifactId>coveralls-maven-plugin</artifactId>
+                <version>4.3.0</version>
             </plugin>
         </plugins>
     </build>
