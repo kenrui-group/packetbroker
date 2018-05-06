@@ -37,7 +37,7 @@ jobs:
             - ~/.m2
           key: v1-dependencies-{{ checksum "pom.xml" }}
 
-      - run: mvn package
+      - run: mvn package jacoco:report coveralls:report -DrepoToken=${repoToken}
 
       - run:
           name: Save test results
