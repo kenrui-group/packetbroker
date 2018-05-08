@@ -13,6 +13,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import java.io.File;
 import java.nio.ByteBuffer;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -34,7 +35,7 @@ public class MessageProcessorTest {
     private static final MessageHeaderDecoder MESSAGE_HEADER_DECODER = new MessageHeaderDecoder();
     private static final PacketDecoder PACKET_DECODER = new PacketDecoder();
     private PacketUtils packetUtils = new PacketUtils();
-    private Config defaultConfig = ConfigFactory.parseResources("defaults.conf");
+    private Config defaultConfig = ConfigFactory.parseFile(new File("configs/defaults.conf"));
     private ConnectionInfo localServerEndpoint = new ConnectionInfo(defaultConfig.getString("localServer.ip"),
             defaultConfig.getInt("localServer.port"),
             defaultConfig.getString("localServer.hostname"),
