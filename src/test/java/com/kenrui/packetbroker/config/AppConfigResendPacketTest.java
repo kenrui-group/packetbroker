@@ -9,6 +9,7 @@ import org.mockito.Mockito;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.io.File;
 import java.nio.channels.Selector;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
@@ -22,7 +23,7 @@ import java.util.concurrent.Callable;
 //})
 public class AppConfigResendPacketTest {
 
-    Config defaultConfig = ConfigFactory.parseResources("defaults.conf");
+    Config defaultConfig = ConfigFactory.parseFile(new File("configs/defaults.conf"));
 
     @Bean
     public int threadCount() {
