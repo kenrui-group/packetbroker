@@ -7,13 +7,14 @@ import com.typesafe.config.ConfigFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.io.File;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 @Configuration
 public class AppConfigQueuePacketsTest {
 
-    Config defaultConfig = ConfigFactory.parseResources("defaults.conf");
+    Config defaultConfig = ConfigFactory.parseFile(new File("configs/defaults.conf"));
 
     @Bean
     public int packetSizeLowerLimit() {

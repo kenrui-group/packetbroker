@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
@@ -32,8 +33,8 @@ import java.util.concurrent.ConcurrentHashMap;
 @ComponentScan("com.kenrui.packetbroker")
 public class AppConfig {
 
-        Config defaultConfig = ConfigFactory.parseResources("defaults.conf");
-//    Config defaultConfig = ConfigFactory.load("configs/defaults.conf");
+//        Config defaultConfig = ConfigFactory.parseResources("defaults.conf");
+    Config defaultConfig = ConfigFactory.parseFile(new File("configs/defaults.conf"));
 
     @Bean
     public int queueSizeRemoteClients() {
