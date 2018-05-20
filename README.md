@@ -43,6 +43,7 @@ This is an excellent built in feature for replicating packets efficiently to rem
 
 # Example Implementation
 Following diagram illustrates how it can be used on the Metamako MetaApp 32, highlighting how the configuration parameters in configs/defaults.conf influences how packets are to be processed.
+
 ![Example Implementation on Metamako MetaApp 32](packetbroker-example-implementation.png)
 
 # License
