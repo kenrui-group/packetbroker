@@ -41,5 +41,10 @@ The [Cisco N7K config guide](https://www.cisco.com/c/en/us/td/docs/switches/data
 ## Linux TUN / TAP
 This is an excellent built in feature for replicating packets efficiently to remote locations but does not work if trailer based timestamps are applied which simply replaces the original Frame Check Sum with the timestamp as such packets will be dropped by the Linux network stack as a malformed packet.
 
+# Example Implementation
+Following diagram illustrates how it can be used on the Metamako MetaApp 32, highlighting how the configuration parameters in configs/defaults.conf influences how packets are to be processed.
+
+![Example Implementation on Metamako MetaApp 32](packetbroker-example-implementation.png)
+
 # License
 Apache License 2.0
