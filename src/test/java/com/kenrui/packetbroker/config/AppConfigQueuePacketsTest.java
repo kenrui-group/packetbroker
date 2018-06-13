@@ -1,6 +1,8 @@
 package com.kenrui.packetbroker.config;
 
+import com.kenrui.packetbroker.helper.QueueSizeChecker;
 import com.kenrui.packetbroker.structures.ConnectionInfo;
+import com.kenrui.packetbroker.structures.EthernetPausePacket;
 import com.kenrui.packetbroker.utilities.PacketUtils;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
@@ -37,6 +39,18 @@ public class AppConfigQueuePacketsTest {
         return defaultConfig.getInt("queueSizes.localDump");
     }
 
+    @Bean
+    public int highWaterMark() {return defaultConfig.getInt("queueSizes.highWaterMark"); }
+
+    @Bean
+    public QueueSizeChecker queueSizeChecker() {
+        return new QueueSizeChecker(highWaterMark(), new EthernetPausePacket(interfaceLocalCapture()));
+    }
+
+    @Bean
+    public String interfaceLocalCapture() {
+        return defaultConfig.getString("interfaces.localCapture");
+    }
 
     @Bean
     public BlockingQueue messageQueueToRemoteClients () {

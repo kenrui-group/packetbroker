@@ -16,6 +16,7 @@ import org.testng.annotations.Test;
 
 import java.nio.ByteBuffer;
 import java.util.List;
+import java.util.Queue;
 import java.util.concurrent.BlockingQueue;
 
 @Component
@@ -29,6 +30,7 @@ public class QueuePacketsTest extends AbstractTestNGSpringContextTests {
     @Autowired public BlockingQueue messageQueueToRemoteClients;
     @Autowired public BlockingQueue messageQueueToLocalDump;
     @Autowired public ConnectionInfo localServerEndpoint;
+    @Autowired public QueueSizeChecker queueSizeChecker;
     @Autowired public PacketUtils packetUtils;
 
     // SUT
@@ -36,7 +38,7 @@ public class QueuePacketsTest extends AbstractTestNGSpringContextTests {
 
     @BeforeMethod
     public void queuePackets() {
-        queuePackets = new QueuePackets(messageQueueToLocalDump, messageQueueToRemoteClients, localServerEndpoint);
+        queuePackets = new QueuePackets(messageQueueToLocalDump, messageQueueToRemoteClients, localServerEndpoint, queueSizeChecker);
     }
 
     @Test
