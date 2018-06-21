@@ -32,7 +32,7 @@ jobs:
 
       - run:
           name: Install libpcap.so
-          command: sudo apt-get install libpcap
+          command: sudo apt-get install libpcap0.8
 
       - run:
           name: Resolve all Maven dependencies
