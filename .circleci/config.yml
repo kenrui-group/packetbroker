@@ -30,7 +30,13 @@ jobs:
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
 
-      - run: mvn dependency:go-offline
+      - run:
+          name: Install libpcap.so
+          command: apt-get install libpcap
+
+      - run:
+          name: Resolve all Maven dependencies
+          command: mvn dependency:go-offline
 
       - save_cache:
           paths:
