@@ -5,9 +5,11 @@ import com.kenrui.packetbroker.clientserver.TunnelClient;
 import com.kenrui.packetbroker.clientserver.TunnelServer;
 import com.kenrui.packetbroker.dumplocal.PacketDump;
 import com.kenrui.packetbroker.helper.QueuePackets;
+import com.kenrui.packetbroker.helper.QueueSizeChecker;
 import com.kenrui.packetbroker.resend.ResendPacket;
 import com.kenrui.packetbroker.resend.ResendPacketHandler;
 import com.kenrui.packetbroker.structures.ConnectionInfo;
+import com.kenrui.packetbroker.structures.EthernetPausePacket;
 import com.kenrui.packetbroker.utilities.PacketUtils;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
@@ -49,6 +51,14 @@ public class AppConfig {
     @Bean
     public int queueSizeResend() {
         return defaultConfig.getInt("queueSizes.resend");
+    }
+
+    @Bean
+    public int highWaterMark() {return defaultConfig.getInt("queueSizes.highWaterMark"); }
+
+    @Bean
+    public QueueSizeChecker queueSizeChecker() {
+        return new QueueSizeChecker(highWaterMark(), new EthernetPausePacket(interfaceLocalCapture()));
     }
 
     @Bean
@@ -97,7 +107,7 @@ public class AppConfig {
     // Helper class to put packets on queues
     @Bean
     public QueuePackets queuePackets() {
-        return new QueuePackets(messageQueueToLocalDump(), messageQueueToRemoteClients(), localServerEndpoint());
+        return new QueuePackets(messageQueueToLocalDump(), messageQueueToRemoteClients(), localServerEndpoint(), queueSizeChecker());
     }
 
     @Bean
