@@ -237,7 +237,7 @@ public class TunnelServerTest extends AbstractTestNGSpringContextTests {
 //        Mockito.doReturn(keySet).when(selector).selectedKeys();
 
         // Create a handler thread for testing and spy it
-        tunnelServerThread = Mockito.spy(new TunnelServer(localServerEndpoint.getPort(), messageQueueToRemoteClients,
+        tunnelServerThread = Mockito.spy(new TunnelServer(localServerEndpoint, messageQueueToRemoteClients,
                 packetsToResendQueue, remoteClients, resend, selector, serverSocketChannel, packetUtils));
     }
 
