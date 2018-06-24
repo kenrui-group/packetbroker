@@ -43,7 +43,13 @@ jobs:
             - ~/.m2
           key: v1-dependencies-{{ checksum "pom.xml" }}
 
-      - run: mvn package jacoco:report coveralls:report -DrepoToken=${repoToken}
+      - run:
+          name: Execute Maven to clean, compile, test, and package
+          command: mvn clean package
+
+      - run:
+          name: Execute Maven to create JaCoCo report and submit Coveralls data
+          command: mvn jacoco:report coveralls:report -DrepoToken=${repoToken}
 
       - run:
           name: Save test results
@@ -51,6 +57,7 @@ jobs:
             mkdir -p ~/surefire-reports/
             find . -type f -regex ".*/target/surefire-reports/.*xml" -exec cp {} ~/surefire-reports/ \;
           when: always
+
       - store_test_results:
           path: ~/surefire-reports
 
@@ -60,5 +67,6 @@ jobs:
             mkdir -p ~/package/
             find . -type f -regex ".*/target/.*jar" -exec cp {} ~/package/ \;
           when: always
+
       - store_artifacts:
           path: ~/package

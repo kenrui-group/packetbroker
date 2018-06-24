@@ -20,6 +20,8 @@ import org.springframework.context.annotation.Configuration;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
@@ -147,7 +149,7 @@ public class AppConfig {
 
     @Bean
     public TunnelServer tunnelServer() throws IOException {
-        return new TunnelServer(localServerEndpoint().getPort(),
+        return new TunnelServer(localServerEndpoint(),
                 messageQueueToRemoteClients(),
                 packetsToResendQueue(),
                 remoteClients(),

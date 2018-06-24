@@ -1,5 +1,6 @@
 package com.kenrui.packetbroker.clientserver;
 
+import com.kenrui.packetbroker.structures.ConnectionInfo;
 import com.kenrui.packetbroker.structures.PacketToResend;
 import com.kenrui.packetbroker.utilities.PacketUtils;
 import org.apache.logging.log4j.LogManager;
@@ -7,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.StandardSocketOptions;
 import java.nio.ByteBuffer;
@@ -21,12 +23,13 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Component
 public class TunnelServer implements Runnable {
-//    @Autowired
+    //    @Autowired
 //    public PacketUtils packetUtils;
-private PacketUtils packetUtils;
+    private PacketUtils packetUtils;
     private BlockingQueue messageQueueToRemoteClients;
     private BlockingQueue packetsToResendQueue;
     private int port;
+    private InetAddress listeningInterfaceIp;
     private Selector selector;
     private ServerSocketChannel serverSocketChannel;
     private ConcurrentHashMap<SocketChannel, Boolean> remoteClientsSentCheck, remoteClients;
@@ -38,18 +41,22 @@ private PacketUtils packetUtils;
     /**
      * Creates tunnel server thread.
      *
-     * @param port                        Local port to bind to for remote clients to connect.
+     * @param localServerEndpoint         Object configured with IP and port info for TunnelServer to bind to listening for remote clients connection.
      * @param messageQueueToRemoteClients Queue with packets destined to be sent to remote clients.
      * @param packetsToResendQueue        Queue for packets that need to be retried again due to slower consumers / dead clients / poor network.
      * @param remoteClients               Map of remote clients.  This object is passed in with no content for this server to populate for each remote client connecting in.
      * @param resend                      Determine if we have configured an interface to resend packets that were not successful when first captured due to slow consumer / dead client / bad connection.
+     * @param selector                    NIO Selector object.  This is being passed in so we can control its behavior when doing Unit Test.
+     * @param serverSocketChannel         ServerSocketChannel object.  This is being passed in so we can control its behavior when doing Unit Test.
+     * @param packetUtils                 PacketUtils is a utility class used for doing a number of things and we use it here for sending messages.
      * @throws IOException
      */
-    public TunnelServer(int port, BlockingQueue messageQueueToRemoteClients,
+    public TunnelServer(ConnectionInfo localServerEndpoint, BlockingQueue messageQueueToRemoteClients,
                         BlockingQueue packetsToResendQueue,
                         ConcurrentHashMap<SocketChannel, Boolean> remoteClients,
                         Boolean resend, Selector selector, ServerSocketChannel serverSocketChannel, PacketUtils packetUtils) throws IOException {
-        this.port = port;
+        this.port = localServerEndpoint.getPort();
+        this.listeningInterfaceIp = localServerEndpoint.getIp();
         this.messageQueueToRemoteClients = messageQueueToRemoteClients;
         this.packetsToResendQueue = packetsToResendQueue;
         this.remoteClients = remoteClients;
@@ -61,7 +68,7 @@ private PacketUtils packetUtils;
 //        selector = Selector.open();
 //        serverSocketChannel = ServerSocketChannel.open();
         this.serverSocketChannel.configureBlocking(false);
-        this.serverSocketChannel.socket().bind(new InetSocketAddress(port));
+        this.serverSocketChannel.socket().bind(new InetSocketAddress(listeningInterfaceIp, port));
         this.serverSocketChannel.register(this.selector, SelectionKey.OP_ACCEPT);
     }
 
@@ -70,12 +77,12 @@ private PacketUtils packetUtils;
     public void run() {
         try {
             logger.info(Thread.currentThread().getName() + " listening on " + serverSocketChannel.getLocalAddress());
+
+            while (!Thread.currentThread().isInterrupted()) {
+                runnableTask();
+            }
         } catch (IOException e) {
             logger.error(e);
-        }
-
-        while (!Thread.currentThread().isInterrupted()) {
-            runnableTask();
         }
     }
 
